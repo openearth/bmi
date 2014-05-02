@@ -1,14 +1,55 @@
 # http://www.gnu.org/software/automake
 
 Makefile.in
+Makefile
 
 # http://www.gnu.org/software/autoconf
 
-/autom4te.cache
-/aclocal.m4
-/compile
-/configure
-/depcomp
-/install-sh
-/missing
-/stamp-h1
+/models/autom4te.cache
+/models/aclocal.m4
+/models/compile
+/models/configure
+/models/depcomp
+/models/install-sh
+/models/missing
+/models/stamp-h1
+/models/config.h
+/models/config.h.in
+/models/config.log
+/models/config.status
+/models/config
+
+# libtool
+
+libtool
+libtool.m4
+ltoptions.m4
+ltsugar.m4
+ltversion.m4
+lt~obsolete.m4
+.libs
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Fortran
+*.mod
+
+# Executables
+*.exe
+*.out
+*.app
