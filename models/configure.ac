@@ -56,6 +56,7 @@ AC_LANG_POP
 #   find . -name Makefile.am | egrep '/.+/' | sort | sed 's/.am$//'
 AC_CONFIG_FILES(Makefile
     fortran/Makefile
+    cpp/Makefile
 )
 
 AC_OUTPUT
