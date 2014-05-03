@@ -1,5 +1,5 @@
-lib_LTLIBRARIES=libmodel.la
-libmodel_la_SOURCES=\
+lib_LTLIBRARIES=libmodelcpp.la
+libmodelcpp_la_SOURCES=\
 	model.cpp
-libmodel_la_INCLUDES=\
+libmodelcpp_la_INCLUDES=\
 	bmi.h
