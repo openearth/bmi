@@ -9,7 +9,7 @@ module logging
      subroutine ilogger(level, msg)
        use iso_c_binding
        use iso_c_utils
-       integer(c_int), intent(in) :: level !< severity
+       integer(c_int), value, intent(in) :: level !< severity
        character(c_char), intent(in) :: msg(MAXSTRINGLEN) !< c message null terminated
      end subroutine ilogger
   end interface
@@ -37,7 +37,7 @@ contains
   subroutine set_logger(c_callback) bind(C, name="set_logger")
     !DEC$ ATTRIBUTES DLLEXPORT::set_logger
 
-    type(c_funptr) :: c_callback
+    type(c_funptr), value :: c_callback
 
     ! Set a callback that will be cauled with new messages
 
