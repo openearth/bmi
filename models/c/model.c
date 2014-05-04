@@ -64,7 +64,7 @@ void get_time_step(double *dt)
 
 void set_logger(Logger callback)
 {
-  char *msg = "Logger of c model attached.";
+  char *msg = "Logger attached to c model.";
   logger = callback;
   _log(INFO, msg);
 }
