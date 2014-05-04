@@ -1,9 +1,29 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include "../include/bmi.h"
-
 
 double current = 0;
 double timestep = 1;
+
+
+// define some arrays for exchange
+double arr1[3] = { 3, 2, 1};
+int arr2[2][3] =
+  {
+    { 3, 2, 1},
+    { 6, 4, 2}
+  };
+bool arr3[2][2][3] =
+  {
+    {
+      { true, false, false},
+      { false, true, false}
+    },
+    {
+      { false, false, false},
+      { false, true, false}
+    }
+  };
 
 typedef enum {
   NOTSET,
