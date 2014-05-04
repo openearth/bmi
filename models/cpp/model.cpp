@@ -3,8 +3,11 @@
 
 #include <cstdio>
 #include <string>
-#include "bmi.h"
+#include <sstream>
+#include "../include/bmi.h"
 
+double current = 0;
+double timestep = 1;
 
 typedef enum {
   NOTSET,
@@ -32,26 +35,36 @@ extern "C" {
 
   int update(double dt)
   {
+    std::ostringstream msg;
+    msg << "updating from " << current << " with dt: " << (dt != -1 ? dt : timestep);
+    _log(DEBUG, msg.str());
+    current += (dt != -1 ? dt : timestep);
+    return 0;
   }
 
   int finalize()
   {
+    return 0;
   }
 
   void get_start_time(double *t)
   {
+    *t = 0;
   }
 
   void get_end_time(double *t)
   {
+    *t = 10;
   }
 
   void get_current_time(double *t)
   {
+    *t = current;
   }
 
   void get_time_step(double *dt)
   {
+    *dt = timestep;
   }
 
   void set_logger(Logger callback)
