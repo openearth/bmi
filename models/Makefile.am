@@ -1,9 +1,12 @@
 EXTRA_DIST = \
 	m4 \
+	include \
 	autogen.sh
 
 SUBDIRS = \
-	fortran \
-	cpp
+	c \
+	cpp \
+	python \
+	fortran
 
 ACLOCAL_AMFLAGS = -I m4

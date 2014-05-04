@@ -55,8 +55,10 @@ AC_LANG_POP
 #   List of makefiles to generate.  This list can be created with the command:
 #   find . -name Makefile.am | egrep '/.+/' | sort | sed 's/.am$//'
 AC_CONFIG_FILES(Makefile
-    fortran/Makefile
-    cpp/Makefile
+        c/Makefile
+        cpp/Makefile
+        fortran/Makefile
+        python/Makefile
 )
 
 AC_OUTPUT
