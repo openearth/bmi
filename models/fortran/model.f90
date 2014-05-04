@@ -53,7 +53,7 @@ contains
     !DEC$ ATTRIBUTES DLLEXPORT::update
 
     !< Custom timestep size, use -1 to use model default.
-    real(c_double), intent(in) :: dt
+    real(c_double), value, intent(in) :: dt
 
 
     ierr = 0

@@ -3,45 +3,42 @@
 
 #include <cstdio>
 #include <string>
-
 #include "bmi.h"
 
-using namespace std;
 
-// TODO: move to a separate BMI C/C++ project.
+extern "C" {
+  int initialize(char *config_file)
+  {
+  }
 
-void initialize(char* config_file)
-{
+  int update(double dt)
+  {
+  }
+
+  int finalize()
+  {
+  }
+
+  void get_start_time(double *t)
+  {
+  }
+
+  void get_end_time(double *t)
+  {
+  }
+
+  void get_current_time(double *t)
+  {
+  }
+
+  void get_time_step(double *dt)
+  {
+  }
+
+  void set_logger(Logger logger)
+  {
+    int level = 3;
+    std::string msg = "logging from cxx";
+    (*logger)(level, msg.c_str());
+  }
 }
-
-void update(const double* dt)
-{
-}
-
-void finalize()
-{
-}
-
-void get_start_time(double* t)
-{
-}
-
-void get_end_time(const double* t)
-{
-}
-
-void get_current_time(double* t)
-{
-}
-
-void get_time_step(double* dt)
-{
-}
-
-void set_logger(Logger* logger)
-{
-  int level = 3;
-  string msg = "hi hi hi hi hi";
-  (*logger)(&level, msg.c_str());
-}
-
