@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 """
-Parse a fortran file and fill templates.
+Parse a fortran file and generate BMI functions from templates.
 
 Usage:
-  generate-bmi <fortranfile>... --template=<template-dir>
+  generate-bmi <fortranfile>... [--template=<template-dir>]
 """
 
 import os
@@ -16,29 +16,20 @@ import json
 from docopt import docopt
 import mako.template
 import mako.lookup
-def main():
-    try:
-        curfile = os.path.abspath(__file__)
-    except NameError:
-        curfile = os.path.abspath(inspect.getsourcefile(lambda : None))
-    srcdir = os.path.join(os.path.dirname(curfile), '..', 'src')
-    templatedir = os.path.join(srcdir, "templates")
-    jsonfile = os.path.join(srcdir, 'structures.json')
-    cpluvfile = os.path.join(srcdir, 'cpluv.f90')
 
-    with open(jsonfile) as f:
-        structures = json.load(f)
+
+def main(fortranfiles, templatedir="templates"):
+    """read the fortran files, parse them and apply them
+    to the templates in templatedir"""
 
 
     variable_re = re.compile(r'''
     ^\s*                                                                 # start of the line
     (?P<fortrantype>(character|logical|double\s+precision|integer|real)) # type
     .*                                                                   # anything
-    (target)                                                             # the word target
-    .*                                                                   # anything
     (::)                                                                 # double colon
     \s*                                                                  # possible spaces
-    (?P<name>\w[\w\d]*)                                              # the variable name
+    (?P<name>\w[\w\d]*)                                                  # the variable name
     (?P<dimension>([(][:,\w]+[)])?)                                      # dimension
     .*                                                                   # anything
     [!][<]?\s*                                                           # comment
@@ -48,38 +39,36 @@ def main():
     \s*                                                                  # space
     (?P<description>.*?)                                                 # description
     \s*                                                                  # space
-    ((?P<json>[{].*[}]))?                                                # JSON key-value pairs
+    ((?P<json>[{].*[}]))                                                 # JSON key-value pairs
     \s*                                                                  # space
     $                                                                    # end of line
     ''',
     re.VERBOSE)
 
     FORTRANTYPESMAP = {
-        'logical' : 'bool',
+        'logical': 'bool',
         'character': 'char',
         'double precision': 'double',
         'real': 'float',
         'integer': 'int'
     }
 
-
-
     variables = []
-    with open(cpluvfile) as f:
-        for line in f.readlines():
-            match = variable_re.match(line)
-            if match:
-                variable = match.groupdict()
-                if variable['dimension'].strip():
-                    variable['rank'] = variable['dimension'].count(',') + 1
-                else:
-                    variable['rank'] = 0
-                variable['type'] = FORTRANTYPESMAP[variable['fortrantype']]
-                if "json" in variable and variable["json"]:
+    for fortranfile in fortranfiles:
+        with open(fortranfile) as f:
+            for line in f.readlines():
+                match = variable_re.match(line)
+                if match:
+                    variable = match.groupdict()
+                    if variable['dimension'].strip():
+                        variable['rank'] = variable['dimension'].count(',') + 1
+                    else:
+                        variable['rank'] = 0
+                    variable['type'] = FORTRANTYPESMAP[variable['fortrantype']]
                     variable.update(json.loads(variable["json"]))
-                variables.append(variable)
+                    variables.append(variable)
 
-
+    # Create some extra variables that can be used in the template
     ISOTYPESMAP = {
         'bool': "logical(c_bool)",
         'char': "character(kind=c_char)",
@@ -88,7 +77,6 @@ def main():
         'int': "integer(c_int)"
     }
 
-
     def dimstr(shape):
         shapetxt = ",".join(shape)
         if shapetxt:
@@ -96,26 +84,21 @@ def main():
         else:
             return ""
 
-    # not documented function in glob
-    templates = glob.glob1(templatedir, '*.f90')
+    templates = [template
+                 for template
+                 in os.listdir(templatedir)
+                 if template.lower().endswith('*.f90')]
 
     lookup = mako.lookup.TemplateLookup(directories=[templatedir], module_directory='/tmp/mako_modules')
 
     for template_name in templates:
         template = lookup.get_template(template_name)
         filename = template_name.replace('.f90', '.inc')
-        with open(os.path.join(srcdir, filename), 'w') as f:
+        with open(filename, 'w') as f:
+            # You can use all the local variables in the templates
             rendered = template.render(**locals())
-            #print(rendered)
             f.write(rendered)
 
-    # TODO, rewrite templates so we can just use variables....
-    variables.extend(structures)
-    jsondata = {
-        "comment": "do not edit this file, it is autogenerated by generate.py from subgridf90",
-        "variables": variables
-    }
-    # store the extracted variables
-    json.dump(jsondata, open(os.path.join(srcdir, 'extractedvariables.json'), 'w'), indent=4)
 if __name__ == '__main__':
-    docopt(__doc__)
+    arguments = docopt(__doc__)
+    main(arguments['<fortranfile>'], arguments['--template'] or 'templates')
