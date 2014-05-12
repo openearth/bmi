@@ -1,10 +1,7 @@
   subroutine get_var_shape(c_var_name, shape) bind(C, name="get_var_shape")
     !DEC$ ATTRIBUTES DLLEXPORT :: get_var_shape
 
-    use cpluv
-    use modelGlobalData
-    use c_structures
-
+    ! Include modules?
 
     use iso_c_binding, only: c_int, c_char, c_loc
 
@@ -17,24 +14,29 @@
     shape = (/0, 0, 0, 0, 0, 0/)
 
     select case(var_name)
+
+<%!
+def shape_expr(variable):
+    '''generate lines with shape expressions'''
+    if variable['rank'] == 0:
+        yield 'shape(1) = 0'
+    for dim in range(variable['rank']):
+        # return in c memory order
+        i = variable['rank'] - dim
+        if 'shape' in variable:
+            # return shape if available
+            shape_i = variable['shape'][dim]
+        else:
+            # return manual size lookup
+            shape_i = "size({name:s}, {dim1:d})".format(name=variable['name'],
+                                                        dim1=dim+1)
+        yield 'shape({i}) = {shape_i}'.format(i=i, shape_i=shape_i)
+%>
 %for variable in variables:
-    case("${variable['altname'] or variable['name']}")
-%if variable['rank'] == 0:
-       shape(1) = 0
-%else:
-%for dim in range(variable['rank']):
-       ! return in c memory order
-       shape(${variable['rank'] - dim}) = size(${variable['name']}, ${dim+1})
+    case("${variable['name']}")
+%for line in shape_expr(variable):
+        ${line}
 %endfor
-%endif
-%endfor
-! structures
-%for structure in structures:
-    case("${structure['name']}")
-       call update_${structure['name']}(network%sts, ${structure['name']})
-       if (allocated(${structure['name']})) then
-          shape(1) = size(${structure['name']}, 1)
-       end if
 %endfor
     end select
 

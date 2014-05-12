@@ -65,7 +65,12 @@ def main(fortranfiles, templatedir="templates"):
                     else:
                         variable['rank'] = 0
                     variable['type'] = FORTRANTYPESMAP[variable['fortrantype']]
+
                     variable.update(json.loads(variable["json"]))
+                    # shape overwrites rank
+                    if 'shape' in variable:
+                        variable['rank'] = len(variable['shape'])
+
                     variables.append(variable)
 
     # Create some extra variables that can be used in the template

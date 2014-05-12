@@ -12,13 +12,8 @@ subroutine get_var_rank(c_var_name, rank) bind(C, name="get_var_rank")
 
   select case(var_name)
 %for variable in variables:
-  case("${variable['altname'] or variable['name']}")
+  case("${variable['name']}")
      rank = ${variable["rank"]}
-%endfor
-! compound types
-%for structure in structures:
-  case("${structure['name']}")
-     rank = 1
 %endfor
   end select
 end subroutine get_var_rank
