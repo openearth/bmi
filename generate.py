@@ -4,7 +4,7 @@
 Parse a fortran file and generate BMI functions from templates.
 
 Usage:
-  generate-bmi <fortranfile>... [--template=<template-dir>]
+  generate-bmi <fortranfile>... [--template-dir=<template-dir>]
 """
 
 import os
@@ -87,7 +87,7 @@ def main(fortranfiles, templatedir="templates"):
     templates = [template
                  for template
                  in os.listdir(templatedir)
-                 if template.lower().endswith('*.f90')]
+                 if template.lower().endswith('.f90')]
 
     lookup = mako.lookup.TemplateLookup(directories=[templatedir], module_directory='/tmp/mako_modules')
 
@@ -101,4 +101,4 @@ def main(fortranfiles, templatedir="templates"):
 
 if __name__ == '__main__':
     arguments = docopt(__doc__)
-    main(arguments['<fortranfile>'], arguments['--template'] or 'templates')
+    main(arguments['<fortranfile>'], arguments['--template-dir'] or 'templates')
