@@ -23,6 +23,7 @@ LT_INIT
 AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_FC
+AX_PYTHON([python2.7])
 
 # Other programs
 AC_PROG_INSTALL
