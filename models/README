@@ -1,0 +1,7 @@
+This directory contains a number of sample models that all implement the native (C-compatible) BMI interface.
+Feel free to add models in extra languages, make sure that you implement the include/bmi.h interface. You can check this by running:
+
+    bmi-runner modelc test.ini
+    bmi-runner modelcpp test.ini
+    bmi-runner modelfortran test.ini
+    bmi-runner modelpython test.ini
