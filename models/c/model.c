@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdbool.h>
-#include "../include/bmi.h"
+#include <stdbool.h>
+
+#include "..\include\bmi.h"
 
 double current = 0;
 double timestep = 1;
@@ -36,10 +38,11 @@ typedef enum {
 
 /* Store callback */
 Logger logger = NULL;
+
 /* Logger function */
 void _log(Level level, char *msg);
 
-int initialize(char *config_file)
+BMI_API int initialize(char *config_file)
 {
   char msg[1024];
   sprintf(msg, "initializing with %s \n", config_file);
@@ -48,7 +51,7 @@ int initialize(char *config_file)
 }
 
 
-int update(double dt){
+BMI_API int update(double dt){
   char msg[1024];
   sprintf(msg, "updating from %f with %f \n", current, (dt != -1 ? dt : timestep));
   _log(DEBUG, msg);
@@ -56,40 +59,44 @@ int update(double dt){
   return 0;
 }
 
-int finalize()
+BMI_API int finalize()
 {
   _log(INFO, "finalizing c model");
   return 0;
 }
 
-void get_start_time(double *t)
+BMI_API void get_start_time(double *t)
 {
   *t = 0;
 }
 
-void get_end_time(double *t)
+BMI_API void get_end_time(double *t)
 {
   *t = 10;
 }
 
-void get_current_time(double *t)
+BMI_API void get_current_time(double *t)
 {
   *t = current;
 }
 
-void get_time_step(double *dt)
+BMI_API void get_time_step(double *dt)
 {
   *dt = timestep;
 }
 
-
-void get_var(char *name, void **ptr)
+BMI_API void get_var(char *name, void **ptr)
 {
   /* The value referenced to by ptr is the memory address of arr1 */
   *ptr = &arr1;
 }
 
-void set_logger(Logger callback)
+BMI_API void after_var_changed(char *name, int *start, int *stop, int *step)
+{
+	_log(INFO, "variable values at the specified slice (start, stop, step) nd-indices were changed");
+}
+
+BMI_API void set_logger(Logger callback)
 {
   char *msg = "Logger attached to c model.";
   logger = callback;
@@ -102,3 +109,8 @@ void _log(Level level, char *msg) {
   }
 }
 
+#if defined _WIN32
+void main()
+{
+}
+#endif

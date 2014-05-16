@@ -57,3 +57,12 @@ lt~obsolete.m4
 *.exe
 *.out
 *.app
+models/vs2013/bmi.sdf
+models/vs2013/bmi.v12.suo
+models/vs2013/bin
+models/vs2013/model-c/Debug
+models/vs2013/model-c/Release
+models/vs2013/model-cpp/Debug
+models/vs2013/model-cpp/Release
+models/vs2013/model-fortran/Debug
+models/vs2013/model-fortran/Release
