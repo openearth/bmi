@@ -82,6 +82,13 @@ void get_time_step(double *dt)
   *dt = timestep;
 }
 
+
+void get_var(char *name, void **ptr)
+{
+  /* The value referenced to by ptr is the memory address of arr1 */
+  *ptr = &arr1;
+}
+
 void set_logger(Logger callback)
 {
   char *msg = "Logger attached to c model.";
