@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <stdbool.h>
 
-#include "..\include\bmi.h"
+#include "../include/bmi.h"
 
 double current = 0;
 double timestep = 1;

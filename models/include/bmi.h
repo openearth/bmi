@@ -7,7 +7,7 @@
 #if defined _WIN32
 #define BMI_API __declspec(dllexport)
 #else
-#defile BMI_API
+#define BMI_API
 #endif
 
 /*
@@ -64,4 +64,4 @@ extern "C" {
 }
 #endif
 
-#endif BMI_API_H
+#endif
