@@ -10,6 +10,7 @@
 #define BMI_API
 #endif
 
+#include <stddef.h>
 /*
   Control function.
   These return an error code.
@@ -45,13 +46,15 @@ extern "C" {
   BMI_API void get_var_count(int *count);
 
 
-  /* get a double pointer - a reference to a multidimensional array */
+  /* get a pointer pointer - a reference to a multidimensional array */
   BMI_API void get_var(char *name, void **ptr);
 
-  /* functions called after variable values were changed */
 
-  /* called after variable was changed, when start is null - all values were changed */
-  BMI_API void after_var_changed(char *name, int *start, int *stop, int *step);
+  /* Set the variable from contiguous memory referenced to by ptr */
+  BMI_API void set_var(char *name, const void *ptr);
+
+  /* Set the variable from contiguous memory, using a stride */
+  BMI_API void set_var_strided(char *name, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const void *ptr);
 
   /* logger to be set from outside so we can log messages */
   typedef void (*Logger)(int level, const char *msg);

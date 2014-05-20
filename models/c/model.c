@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdbool.h>
-
+#include <string.h>
 #include "../include/bmi.h"
 
 double current = 0;
@@ -91,9 +91,11 @@ BMI_API void get_var(char *name, void **ptr)
   *ptr = &arr1;
 }
 
-BMI_API void after_var_changed(char *name, int *start, int *stop, int *step)
+BMI_API void set_var(char *name, const void *ptr)
 {
-	_log(INFO, "variable values at the specified slice (start, stop, step) nd-indices were changed");
+  /* I think this should be enough */
+  
+  memcpy(&arr1, ptr, 3*sizeof(double)); 
 }
 
 BMI_API void set_logger(Logger callback)

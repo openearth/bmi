@@ -93,11 +93,6 @@ extern "C" {
 	  *ptr = &arr1;
   }
 
-  BMI_API void after_var_changed(char *name, int *start, int *stop, int *step)
-  {
-	  _log(INFO, "variable values at the specified slice (start, stop, step) nd-indices were changed");
-  }
-
   BMI_API void set_logger(Logger callback)
   {
     int level = 3;
