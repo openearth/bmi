@@ -11,6 +11,7 @@
 #endif
 
 #define MAXSTRINGLEN 1024
+#define MAXDIMS 6
 #include <stddef.h>
 /*
   Control function.
@@ -38,9 +39,11 @@ extern "C" {
   BMI_API void get_time_step(double *dt);
 
 
-  BMI_API void get_var_shape(char *name, int *shape);
+  BMI_API void get_var_shape(char *name, int shape[MAXDIMS]);
 
   BMI_API void get_var_rank(char *name, int *rank);
+
+  BMI_API void get_var_type(char *name, char *type);
 
   BMI_API void get_var_count(int *count);
 
