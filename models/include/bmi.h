@@ -10,6 +10,7 @@
 #define BMI_API
 #endif
 
+#define MAXSTRINGLEN 1024
 #include <stddef.h>
 /*
   Control function.
@@ -41,10 +42,9 @@ extern "C" {
 
   BMI_API void get_var_rank(char *name, int *rank);
 
-  BMI_API void get_var_name(int *index, char *name);
-
   BMI_API void get_var_count(int *count);
 
+  BMI_API void get_var_name(int index, char *name);
 
   /* get a pointer pointer - a reference to a multidimensional array */
   BMI_API void get_var(char *name, void **ptr);

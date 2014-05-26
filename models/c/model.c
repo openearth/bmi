@@ -44,7 +44,7 @@ void _log(Level level, char *msg);
 
 BMI_API int initialize(char *config_file)
 {
-  char msg[1024];
+  char msg[MAXSTRINGLEN];
   sprintf(msg, "initializing with %s \n", config_file);
   _log(INFO, msg);
   return 0;
@@ -52,7 +52,7 @@ BMI_API int initialize(char *config_file)
 
 
 BMI_API int update(double dt){
-  char msg[1024];
+  char msg[MAXSTRINGLEN];
   sprintf(msg, "updating from %f with %f \n", current, (dt != -1 ? dt : timestep));
   _log(DEBUG, msg);
   current += (dt != -1 ? dt : timestep);
@@ -83,6 +83,32 @@ BMI_API void get_current_time(double *t)
 BMI_API void get_time_step(double *dt)
 {
   *dt = timestep;
+}
+
+BMI_API void get_var_count(int *n)
+{
+  *n = 3;
+}
+
+BMI_API void get_var_name(int n, char *name)
+{
+  char msg[MAXSTRINGLEN];
+  switch (n) {
+  case 0:
+    strncpy(name, "arr1", MAXSTRINGLEN);
+    break;
+  case 1:
+    strncpy(name, "arr2", MAXSTRINGLEN);
+    break;
+  case 2:
+    strncpy(name, "arr3", MAXSTRINGLEN);
+    break;
+  default:
+    strncpy(name, "", MAXSTRINGLEN);
+  }
+  sprintf(msg, "getting variable %d -> %s\n", n, name);
+  _log(DEBUG, msg);
+
 }
 
 BMI_API void get_var(char *name, void **ptr)
