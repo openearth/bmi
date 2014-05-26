@@ -191,26 +191,26 @@ BMI_API void get_var_type(char *name, char *type)
   _log(DEBUG, msg);
 }
 
-BMI_API void get_var(char *name, void **ptr)
+BMI_API void get_var(char *name, void *ptr)
 {
   /* The value referenced to by ptr is the memory address of arr1 */
   if (strcmp(name, "arr1") == 0)
     {
-      *ptr = &arr1;
+      ptr = &arr1;
     } 
   else if (strcmp(name, "arr2") == 0)
     {
-      *ptr = &arr2;
+      ptr = &arr2;
     } 
   else if (strcmp(name, "arr3") == 0)
     {
-      *ptr = &arr3;
+      ptr = &arr3;
     } 
   else 
     {
-      *ptr = NULL;
+      ptr = NULL;
     }
-  sprintf(msg, "variable %s is at location %p", name, *ptr);
+  sprintf(msg, "variable %s is at location %p", name, ptr);
   _log(DEBUG, msg);
 }
 

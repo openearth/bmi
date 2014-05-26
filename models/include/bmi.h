@@ -50,14 +50,10 @@ extern "C" {
   BMI_API void get_var_name(int index, char *name);
 
   /* get a pointer pointer - a reference to a multidimensional array */
-  BMI_API void get_var(char *name, void **ptr);
-
+  BMI_API void get_var(char *name, void *ptr);
 
   /* Set the variable from contiguous memory referenced to by ptr */
   BMI_API void set_var(char *name, const void *ptr);
-
-  /* Set the variable from contiguous memory, using a stride */
-  BMI_API void set_var_strided(char *name, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const void *ptr);
 
   /* logger to be set from outside so we can log messages */
   typedef void (*Logger)(int level, const char *msg);

@@ -87,10 +87,10 @@ extern "C" {
     *dt = timestep;
   }
 
-  BMI_API void get_var(char *name, void **ptr)
+  BMI_API void get_var(char *name, void *ptr)
   {
-	  /* The value referenced to by ptr is the memory address of arr1 */
-	  *ptr = &arr1;
+    /* The value referenced to by ptr is the memory address of arr1 */
+    ptr = &arr1;
   }
 
   BMI_API void set_logger(Logger callback)
