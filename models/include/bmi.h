@@ -13,23 +13,21 @@
 #define MAXSTRINGLEN 1024
 #define MAXDIMS 6
 #include <stddef.h>
-/*
-  Control function.
-  These return an error code.
-*/
+
+typedef enum { NOTSET, DEBUG, INFO, WARN, ERROR, FATAL } Level;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-  BMI_API int initialize(char *config_file);
+  /* control functions. These return an error code. */
+  BMI_API int initialize(const char *config_file);
 
   BMI_API int update(double dt);
 
   BMI_API int finalize();
 
-  /*
-    Time control functions
-  */
+  /* time control functions */
   BMI_API void get_start_time(double *t);
 
   BMI_API void get_end_time(double *t);
@@ -38,33 +36,31 @@ extern "C" {
 
   BMI_API void get_time_step(double *dt);
 
+  /* variable info */
+  BMI_API void get_var_shape(const char *name, int shape[MAXDIMS]);
 
-  BMI_API void get_var_shape(char *name, int shape[MAXDIMS]);
+  BMI_API void get_var_rank(const char *name, int *rank);
 
-  BMI_API void get_var_rank(char *name, int *rank);
-
-  BMI_API void get_var_type(char *name, char *type);
+  BMI_API void get_var_type(const char *name, char *type);
 
   BMI_API void get_var_count(int *count);
 
   BMI_API void get_var_name(int index, char *name);
 
   /* get a pointer pointer - a reference to a multidimensional array */
-  BMI_API void get_var(char *name, void **ptr);
-
+  BMI_API void get_var(const char *name, void **ptr);
 
   /* Set the variable from contiguous memory referenced to by ptr */
-  BMI_API void set_var(char *name, const void *ptr);
+  BMI_API void set_var(const char *name, const void *ptr);
 
-  /* Set the variable from contiguous memory, using a stride */
-  BMI_API void set_var_strided(char *name, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const void *ptr);
+  /* Set a slice of the variable from contiguous memory using start / count multi-dimensional indices */
+  BMI_API void set_var_slice(const char *name, const int *start, const int *count, const void *ptr);
 
   /* logger to be set from outside so we can log messages */
-  typedef void (*Logger)(int level, const char *msg);
+  typedef void (__stdcall *Logger)(Level level, const char *msg);
 
   /* set logger by setting a pointer to the log function */
   BMI_API void set_logger(Logger logger);
-
 
 #ifdef __cplusplus
 }

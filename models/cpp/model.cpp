@@ -27,25 +27,15 @@ bool arr3[2][2][3] =
     }
   };
 
-
-
-typedef enum {
-  NOTSET,
-  DEBUG,
-  INFO,
-  WARN,
-  ERROR,
-  FATAL
-} Level ;
-
 /* Store callback */
 Logger logger = NULL;
+
 /* Logger function */
 void _log(Level level, std::string msg);
 
 
 extern "C" {
-  BMI_API int initialize(char *config_file)
+  BMI_API int initialize(const char *config_file)
   {
 	std::ostringstream msg;
 	msg << "initializing with " << config_file;
@@ -87,7 +77,7 @@ extern "C" {
     *dt = timestep;
   }
 
-  BMI_API void get_var(char *name, void **ptr)
+  BMI_API void get_var(const char *name, void **ptr)
   {
 	  /* The value referenced to by ptr is the memory address of arr1 */
 	  *ptr = &arr1;
@@ -95,7 +85,7 @@ extern "C" {
 
   BMI_API void set_logger(Logger callback)
   {
-    int level = 3;
+    Level level = Level::INFO;
     std::string msg = "Logging attached to cxx model";
     logger = callback;
     logger(level, msg.c_str());
