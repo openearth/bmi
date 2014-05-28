@@ -85,7 +85,7 @@ extern "C" {
 
   BMI_API void set_logger(Logger callback)
   {
-    Level level = Level::INFO;
+    Level level = INFO;
     std::string msg = "Logging attached to cxx model";
     logger = callback;
     logger(level, msg.c_str());
@@ -98,6 +98,7 @@ void _log(Level level, std::string msg) {
   }
 }
 
+// placeholder function, all dll's need a main.. in windows only
 #if defined _WIN32
 void main()
 {
