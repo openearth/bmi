@@ -6,15 +6,26 @@
 
 #if defined _WIN32
 #define BMI_API __declspec(dllexport)
+/* Calling convention, stdcall in windows, cdecl in the rest of the world */
+#define CALLCONV __stdcall
 #else
 #define BMI_API
+#define CALLCONV
 #endif
+
 
 #define MAXSTRINGLEN 1024
 #define MAXDIMS 6
 #include <stddef.h>
 
-typedef enum { NOTSET, DEBUG, INFO, WARN, ERROR, FATAL } Level;
+typedef enum {
+  ALL,
+  DEBUG,
+  INFO,
+  WARN,
+  ERROR,
+  FATAL
+} Level;
 
 #ifdef __cplusplus
 extern "C" {
@@ -57,7 +68,7 @@ extern "C" {
   BMI_API void set_var_slice(const char *name, const int *start, const int *count, const void *ptr);
 
   /* logger to be set from outside so we can log messages */
-  typedef void (__stdcall *Logger)(Level level, const char *msg);
+  typedef void (CALLCONV *Logger)(Level level, const char *msg);
 
   /* set logger by setting a pointer to the log function */
   BMI_API void set_logger(Logger logger);
