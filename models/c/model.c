@@ -28,33 +28,24 @@ bool arr3[2][2][3] =
     }
   };
 
-typedef enum {
-  NOTSET,
-  DEBUG,
-  INFO,
-  WARN,
-  ERROR,
-  FATAL
-} Level ;
-
 /* Store callback */
 Logger logger = NULL;
 
 /* Logger function */
 void _log(Level level, char *msg);
 
-BMI_API int initialize(char *config_file)
+BMI_API int initialize(const char *config_file)
 {
-  sprintf(msg, "initializing with %s \n", config_file);
+  sprintf(msg, "initializing with %s", config_file);
   _log(INFO, msg);
   return 0;
 }
 
 
 BMI_API int update(double dt){
-  sprintf(msg, "updating from %f with %f \n", current, (dt != -1 ? dt : timestep));
+  sprintf(msg, "updating from %f with %f", current, (dt != -1 ? dt : timestep));
   _log(DEBUG, msg);
-  current += (dt != -1 ? dt : timestep);
+  current = current + (dt != -1 ? dt : timestep);
   return 0;
 }
 
@@ -104,12 +95,12 @@ BMI_API void get_var_name(int n, char *name)
   default:
     strncpy(name, "", MAXSTRINGLEN);
   }
-  sprintf(msg, "getting variable %d -> %s\n", n, name);
+  sprintf(msg, "getting variable %d -> %s", n, name);
   _log(DEBUG, msg);
 }
 
 
-BMI_API void get_var_rank(char *name, int *rank)
+BMI_API void get_var_rank(const char *name, int *rank)
 {
   /* The value referenced to by ptr is the memory address of arr1 */
   if (strcmp(name, "arr1") == 0)
@@ -133,7 +124,7 @@ BMI_API void get_var_rank(char *name, int *rank)
 }
 
 
-BMI_API void get_var_shape(char *name, int shape[MAXDIMS])
+BMI_API void get_var_shape(const char *name, int shape[MAXDIMS])
 {
   
   int rank = 0;
@@ -168,7 +159,7 @@ BMI_API void get_var_shape(char *name, int shape[MAXDIMS])
   _log(DEBUG, msg);
 }
 
-BMI_API void get_var_type(char *name, char *type)
+BMI_API void get_var_type(const char *name, char *type)
 {
   /* The value referenced to by ptr is the memory address of arr1 */
   if (strcmp(name, "arr1") == 0)
@@ -191,7 +182,7 @@ BMI_API void get_var_type(char *name, char *type)
   _log(DEBUG, msg);
 }
 
-BMI_API void get_var(char *name, void **ptr)
+BMI_API void get_var(const char *name, void **ptr)
 {
   /* The value referenced to by ptr is the memory address of arr1 */
   if (strcmp(name, "arr1") == 0)
@@ -214,7 +205,7 @@ BMI_API void get_var(char *name, void **ptr)
   _log(DEBUG, msg);
 }
 
-BMI_API void set_var(char *name, const void *ptr)
+BMI_API void set_var(const char *name, const void *ptr)
 {
 	if (strcmp(name, "arr1") == 0)
 	{
@@ -253,6 +244,7 @@ BMI_API void set_logger(Logger callback)
   _log(INFO, msg);
 }
 
+/* private log function, which logs to the logging callback */
 void _log(Level level, char *msg) {
   if (logger != NULL) {
     logger(level, msg);
