@@ -216,9 +216,34 @@ BMI_API void get_var(char *name, void **ptr)
 
 BMI_API void set_var(char *name, const void *ptr)
 {
-  /* I think this should be enough */
-  
-  memcpy(&arr1, ptr, 3*sizeof(double)); 
+	if (strcmp(name, "arr1") == 0)
+	{
+		memcpy(arr1, ptr, sizeof(arr1));
+	}
+	else if (strcmp(name, "arr2") == 0)
+	{
+		memcpy(arr2, ptr, sizeof(arr2));
+	}
+	else if (strcmp(name, "arr3") == 0)
+	{
+		memcpy(arr3, ptr, sizeof(arr3));
+	}
+}
+
+BMI_API void set_var_slice(const char *name, const int *start, const int *count, const void *ptr)
+{
+	if (strcmp(name, "arr2") == 0)
+	{
+		int *v = ptr;
+
+		for(int i = 0; i < count[0]; ++i)
+		{
+			for (int j = 0; j < count[1]; ++j)
+			{
+				arr2[start[0] + i][start[1] + j] = v[i * 3 + j];
+			}
+		}
+	}
 }
 
 BMI_API void set_logger(Logger callback)
