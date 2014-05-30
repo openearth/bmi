@@ -1,6 +1,6 @@
-/* Please use the BSD coding standard: */
-/* https://en.wikipedia.org/wiki/Indent_style#Allman_style */
-/* -*- c-file-style: "bsd" -*- */
+/* -*- c-file-style: "stroustrup" -*- */
+/* Please use the stroustrup coding standard: */
+
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -17,19 +17,19 @@ int shape[MAXDIMS] ;
 double arr1[3] = { 3, 2, 1};
 int arr2[2][3] =
 {
-        { 3, 2, 1},
-        { 6, 4, 2}
+    { 3, 2, 1},
+    { 6, 4, 2}
 };
 bool arr3[2][2][3] =
 {
-        {
-                { true, false, false},
-                { false, true, false}
-        },
-        {
-                { false, false, false},
-                { false, true, false}
-        }
+    {
+        { true, false, false},
+        { false, true, false}
+    },
+    {
+        { false, false, false},
+        { false, true, false}
+    }
 };
 
 /* Store callback */
@@ -40,218 +40,218 @@ void _log(Level level, char *msg);
 
 BMI_API int initialize(const char *config_file)
 {
-        sprintf(msg, "initializing with %s", config_file);
-        _log(INFO, msg);
-        return 0;
+    sprintf(msg, "initializing with %s", config_file);
+    _log(INFO, msg);
+    return 0;
 }
 
 
 BMI_API int update(double dt){
-        sprintf(msg, "updating from %f with %f", current, (dt != -1 ? dt : timestep));
-        _log(DEBUG, msg);
-        current = current + (dt != -1 ? dt : timestep);
-        return 0;
+    sprintf(msg, "updating from %f with %f", current, (dt != -1 ? dt : timestep));
+    _log(DEBUG, msg);
+    current = current + (dt != -1 ? dt : timestep);
+    return 0;
 }
 
 BMI_API int finalize()
 {
-        _log(INFO, "finalizing c model");
-        return 0;
+    _log(INFO, "finalizing c model");
+    return 0;
 }
 
 BMI_API void get_start_time(double *t)
 {
-        *t = 0;
+    *t = 0;
 }
 
 BMI_API void get_end_time(double *t)
 {
-        *t = 10;
+    *t = 10;
 }
 
 BMI_API void get_current_time(double *t)
 {
-        *t = current;
+    *t = current;
 }
 
 BMI_API void get_time_step(double *dt)
 {
-        *dt = timestep;
+    *dt = timestep;
 }
 
 BMI_API void get_var_count(int *n)
 {
-        *n = 3;
+    *n = 3;
 }
 
 BMI_API void get_var_name(int n, char *name)
 {
-        switch (n) {
-        case 0:
-                strncpy(name, "arr1", MAXSTRINGLEN);
-                break;
-        case 1:
-                strncpy(name, "arr2", MAXSTRINGLEN);
-                break;
-        case 2:
-                strncpy(name, "arr3", MAXSTRINGLEN);
-                break;
-        default:
-                strncpy(name, "", MAXSTRINGLEN);
-        }
-        sprintf(msg, "getting variable %d -> %s", n, name);
-        _log(DEBUG, msg);
+    switch (n) {
+    case 0:
+        strncpy(name, "arr1", MAXSTRINGLEN);
+        break;
+    case 1:
+        strncpy(name, "arr2", MAXSTRINGLEN);
+        break;
+    case 2:
+        strncpy(name, "arr3", MAXSTRINGLEN);
+        break;
+    default:
+        strncpy(name, "", MAXSTRINGLEN);
+    }
+    sprintf(msg, "getting variable %d -> %s", n, name);
+    _log(DEBUG, msg);
 }
 
 
 BMI_API void get_var_rank(const char *name, int *rank)
 {
-        /* The value referenced to by ptr is the memory address of arr1 */
-        if (strcmp(name, "arr1") == 0)
-        {
-                *rank = 1;
-        } 
-        else if (strcmp(name, "arr2") == 0)
-        {
-                *rank = 2;
-        } 
-        else if (strcmp(name, "arr3") == 0)
-        {
-                *rank = 3;
-        } 
-        else 
-        {
-                *rank = 0;
-        }
-        sprintf(msg, "variable %s has rank %d", name, *rank);
-        _log(DEBUG, msg);
+    /* The value referenced to by ptr is the memory address of arr1 */
+    if (strcmp(name, "arr1") == 0)
+    {
+        *rank = 1;
+    } 
+    else if (strcmp(name, "arr2") == 0)
+    {
+        *rank = 2;
+    } 
+    else if (strcmp(name, "arr3") == 0)
+    {
+        *rank = 3;
+    } 
+    else 
+    {
+        *rank = 0;
+    }
+    sprintf(msg, "variable %s has rank %d", name, *rank);
+    _log(DEBUG, msg);
 }
 
 
 BMI_API void get_var_shape(const char *name, int shape[MAXDIMS])
 {
   
-        int rank = 0;
-        int i;
-        for (i = 0; i < MAXDIMS; i++) {
-                shape[i] = 0;
-        }
+    int rank = 0;
+    int i;
+    for (i = 0; i < MAXDIMS; i++) {
+        shape[i] = 0;
+    }
 
-        get_var_rank(name, &rank);
-        /* The value referenced to by ptr is the memory address of arr1 */
-        if (strcmp(name, "arr1") == 0)
-        {
-                shape[0] = 3;
-        } 
-        else if (strcmp(name, "arr2") == 0)
-        {
-                shape[0] = 2;
-                shape[1] = 3;
+    get_var_rank(name, &rank);
+    /* The value referenced to by ptr is the memory address of arr1 */
+    if (strcmp(name, "arr1") == 0)
+    {
+        shape[0] = 3;
+    } 
+    else if (strcmp(name, "arr2") == 0)
+    {
+        shape[0] = 2;
+        shape[1] = 3;
 
-        } 
-        else if (strcmp(name, "arr3") == 0)
-        {
-                shape[0] = 2;
-                shape[1] = 2;
-                shape[2] = 3;
-        } 
-        else 
-        {
+    } 
+    else if (strcmp(name, "arr3") == 0)
+    {
+        shape[0] = 2;
+        shape[1] = 2;
+        shape[2] = 3;
+    } 
+    else 
+    {
       
-        }
-        sprintf(msg, "variable %s has shape %d", name, *shape);
-        _log(DEBUG, msg);
+    }
+    sprintf(msg, "variable %s has shape %d", name, *shape);
+    _log(DEBUG, msg);
 }
 
 BMI_API void get_var_type(const char *name, char *type)
 {
-        /* The value referenced to by ptr is the memory address of arr1 */
-        if (strcmp(name, "arr1") == 0)
-        {
-                strncpy(type, "double", MAXSTRINGLEN);
-        } 
-        else if (strcmp(name, "arr2") == 0)
-        {
-                strncpy(type, "int", MAXSTRINGLEN);
-        } 
-        else if (strcmp(name, "arr3") == 0)
-        {
-                strncpy(type, "bool", MAXSTRINGLEN);
-        } 
-        else 
-        {
-                strncpy(type, "", MAXSTRINGLEN);
-        }
-        sprintf(msg, "variable %s has type %s", name, type);
-        _log(DEBUG, msg);
+    /* The value referenced to by ptr is the memory address of arr1 */
+    if (strcmp(name, "arr1") == 0)
+    {
+        strncpy(type, "double", MAXSTRINGLEN);
+    } 
+    else if (strcmp(name, "arr2") == 0)
+    {
+        strncpy(type, "int", MAXSTRINGLEN);
+    } 
+    else if (strcmp(name, "arr3") == 0)
+    {
+        strncpy(type, "bool", MAXSTRINGLEN);
+    } 
+    else 
+    {
+        strncpy(type, "", MAXSTRINGLEN);
+    }
+    sprintf(msg, "variable %s has type %s", name, type);
+    _log(DEBUG, msg);
 }
 
 BMI_API void get_var(const char *name, void **ptr)
 {
-        /* The value referenced to by ptr is the memory address of arr1 */
-        if (strcmp(name, "arr1") == 0)
-        {
-                *ptr = &arr1;
-        } 
-        else if (strcmp(name, "arr2") == 0)
-        {
-                *ptr = &arr2;
-        } 
-        else if (strcmp(name, "arr3") == 0)
-        {
-                *ptr = &arr3;
-        } 
-        else 
-        {
-                *ptr = NULL;
-        }
-        sprintf(msg, "variable %s is at location %p", name, *ptr);
-        _log(DEBUG, msg);
+    /* The value referenced to by ptr is the memory address of arr1 */
+    if (strcmp(name, "arr1") == 0)
+    {
+        *ptr = &arr1;
+    } 
+    else if (strcmp(name, "arr2") == 0)
+    {
+        *ptr = &arr2;
+    } 
+    else if (strcmp(name, "arr3") == 0)
+    {
+        *ptr = &arr3;
+    } 
+    else 
+    {
+        *ptr = NULL;
+    }
+    sprintf(msg, "variable %s is at location %p", name, *ptr);
+    _log(DEBUG, msg);
 }
 
 BMI_API void set_var(const char *name, const void *ptr)
 {
-        if (strcmp(name, "arr1") == 0)
-        {
-                memcpy(arr1, ptr, sizeof(arr1));
-        }
-        else if (strcmp(name, "arr2") == 0)
-        {
-                memcpy(arr2, ptr, sizeof(arr2));
-        }
-        else if (strcmp(name, "arr3") == 0)
-        {
-                memcpy(arr3, ptr, sizeof(arr3));
-        }
+    if (strcmp(name, "arr1") == 0)
+    {
+        memcpy(arr1, ptr, sizeof(arr1));
+    }
+    else if (strcmp(name, "arr2") == 0)
+    {
+        memcpy(arr2, ptr, sizeof(arr2));
+    }
+    else if (strcmp(name, "arr3") == 0)
+    {
+        memcpy(arr3, ptr, sizeof(arr3));
+    }
 }
 
 BMI_API void set_var_slice(const char *name, const int *start, const int *count, const void *ptr)
 {
-        int i;
-        int j;
-        if (strcmp(name, "arr2") == 0) {
-                for(i = 0; i < count[0]; ++i)
-                {
-                        for (j = 0; j < count[1]; ++j)
-                        {
-                                arr2[start[0] + i][start[1] + j] = ((int*) ptr)[i * 3 + j];
-                        }
-                }
+    int i;
+    int j;
+    if (strcmp(name, "arr2") == 0) {
+        for(i = 0; i < count[0]; ++i)
+        {
+            for (j = 0; j < count[1]; ++j)
+            {
+                arr2[start[0] + i][start[1] + j] = ((int*) ptr)[i * 3 + j];
+            }
         }
+    }
 }
 
 BMI_API void set_logger(Logger callback)
 {
-        char *msg = "Logger attached to c model.";
-        logger = callback;
-        _log(INFO, msg);
+    char *msg = "Logger attached to c model.";
+    logger = callback;
+    _log(INFO, msg);
 }
 
 /* private log function, which logs to the logging callback */
 void _log(Level level, char *msg) {
-        if (logger != NULL) {
-                logger(level, msg);
-        }
+    if (logger != NULL) {
+        logger(level, msg);
+    }
 }
 
 #if defined _WIN32
