@@ -209,7 +209,23 @@ BMI_API void set_var(const char *name, const void *ptr)
 {
   /* I think this should be enough */
   
-  memcpy(&arr1, ptr, 3*sizeof(double)); 
+  /* The value referenced to by ptr is the memory address of arr1 */
+  if (strcmp(name, "arr1") == 0)
+    {
+      memcpy(&arr1, ptr, sizeof(arr1); 
+    } 
+  else if (strcmp(name, "arr2") == 0)
+    {
+      memcpy(&arr2, ptr, sizeof(arr2); 
+    } 
+  else if (strcmp(name, "arr3") == 0)
+    {
+      memcpy(&arr3, ptr, sizeof(arr3); 
+    } 
+  else 
+    {
+      /* Unknown name */
+    }
 }
 
 BMI_API void set_logger(Logger callback)
@@ -219,6 +235,7 @@ BMI_API void set_logger(Logger callback)
   _log(INFO, msg);
 }
 
+/* private log function, which logs to the logging callback */
 void _log(Level level, char *msg) {
   if (logger != NULL) {
     logger(level, msg);
