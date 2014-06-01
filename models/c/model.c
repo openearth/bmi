@@ -40,6 +40,7 @@ void _log(Level level, char *msg);
 
 BMI_API int initialize(const char *config_file)
 {
+    current = 0;
     sprintf(msg, "initializing with %s", config_file);
     _log(INFO, msg);
     return 0;
