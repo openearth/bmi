@@ -230,15 +230,46 @@ BMI_API void set_var_slice(const char *name, const int *start, const int *count,
 {
     int i;
     int j;
-    if (strcmp(name, "arr2") == 0) {
-        for(i = 0; i < count[0]; ++i)
+    int k;
+    int rank; 
+    int shape[MAXDIMS];
+    void *arr;
+    int size;
+
+    if (strcmp(name, "arr1") == 0)
+    {
+        size = sizeof(arr1);
+        arr = &arr1;
+        get_var_rank(name, &rank);
+        get_var_shape(name, shape);
+    }
+    else if (strcmp(name, "arr2") == 0)
+    {
+        size = sizeof(arr2);
+        arr = &arr2;
+        get_var_rank(name, &rank);
+        get_var_shape(name, shape);
+    }
+    else if (strcmp(name, "arr3") == 0)
+    {
+        size = sizeof(arr3);
+        arr = &arr3;
+        get_var_rank(name, &rank);
+        get_var_shape(name, shape);
+    }
+    
+
+    
+    k = 0;
+    for(i = 0; i < rank; ++i)
+    {
+        /* copy byte by byte.... */
+        for (j = start[i]*size; j < (start[i] + count[i])*size; ++j)
         {
-            for (j = 0; j < count[1]; ++j)
-            {
-                arr2[start[0] + i][start[1] + j] = ((int*) ptr)[i * 3 + j];
-            }
+            ((char*)arr)[j] = ((char*)ptr)[k++];
         }
     }
+    
 }
 
 BMI_API void set_logger(Logger callback)
