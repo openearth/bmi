@@ -226,11 +226,37 @@ BMI_API void set_var(const char *name, const void *ptr)
     }
 }
 
-BMI_API void set_var_slice(const char *name, const int *start, const int *count, const void *ptr)
-{
+
+void ravel_indices(int indices[][MAXDIMS], int n, int *shape, int rank, char order) {
     int i;
     int j;
-    int k;
+    int index[MAXDIMS];
+    int prod;
+    printf("rank: %d\n", rank);
+    printf("shape:\n");
+    for (j=0; j<rank; j++) {
+        printf("%d ", shape[j]);
+    }
+    
+    printf("\n");
+    for (i = 0; i < n; i++) {
+        index[i] = 0;
+        prod=1;
+        for (j=0; j<rank; j++) {
+            prod = prod * shape[rank-j-1];
+            printf("idx %d %d, prod %d, shape %d\n", i, j, prod, shape[rank-j-1]);
+            index[i] += (indices[i][j] + prod);
+        }
+    }
+    printf("value\n");
+    for (i=0; i < n; i++) {
+        printf("%d ", index[i]);
+    }
+    printf("\n");
+};
+
+BMI_API void set_var_slice(const char *name, const int *start, const int *count, const void *ptr)
+{
     int rank; 
     int shape[MAXDIMS];
     void *arr;
@@ -258,17 +284,17 @@ BMI_API void set_var_slice(const char *name, const int *start, const int *count,
         get_var_shape(name, shape);
     }
     
-
+    const char order='C';
+    /* n dims by n points */
+    int indices[][MAXDIMS] = {{1}, {10}, {50}, {90}};
+    ravel_indices(indices, 4, shape, rank, order);
     
-    k = 0;
-    for(i = 0; i < rank; ++i)
-    {
-        /* copy byte by byte.... */
-        for (j = start[i]*size; j < (start[i] + count[i])*size; ++j)
-        {
-            ((char*)arr)[j] = ((char*)ptr)[k++];
-        }
-    }
+    int indices2[][MAXDIMS]  = {{1,5}, {2,3}, {5,8}, {6,3}};
+    shape[0] = 2;
+    shape[1] = 10;
+    ravel_indices(indices2, 4, shape, 2, order);
+    // {15, 16, 26}
+    
     
 }
 
