@@ -5,6 +5,7 @@
 #include <string>
 #include <sstream>
 #include "../include/bmi.h"
+#include "../include/bmi_extensions.h"
 
 double current = 0;
 double timestep = 1;
