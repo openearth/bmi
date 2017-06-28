@@ -65,8 +65,11 @@ def main(fortranfiles, templatedir="templates"):
                     else:
                         variable['rank'] = 0
                     variable['type'] = FORTRANTYPESMAP[variable['fortrantype']]
-
-                    variable.update(json.loads(variable["json"]))
+                    jsontxt = variable["json"]
+                    try:
+                        variable.update(json.loads(jsontxt))
+                    except ValueError, e:
+                        raise ValueError("invalid json: %s" % (jsontxt,))
                     # shape overwrites rank
                     if 'shape' in variable:
                         variable['rank'] = len(variable['shape'])
@@ -106,4 +109,6 @@ def main(fortranfiles, templatedir="templates"):
 
 if __name__ == '__main__':
     arguments = docopt(__doc__)
-    main(arguments['<fortranfile>'], arguments['--template-dir'] or 'templates')
+    templatedir = arguments['--template-dir'] or 'templates'
+    fortranfile = arguments['<fortranfile>']
+    main(fortranfile, templatedir)
