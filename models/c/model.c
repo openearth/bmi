@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "../include/bmi.h"
+#include "../include/bmi_extensions.h"
 
 double current = 0;
 double timestep = 1;
@@ -111,16 +112,16 @@ BMI_API void get_var_rank(const char *name, int *rank)
     if (strcmp(name, "arr1") == 0)
     {
         *rank = 1;
-    } 
+    }
     else if (strcmp(name, "arr2") == 0)
     {
         *rank = 2;
-    } 
+    }
     else if (strcmp(name, "arr3") == 0)
     {
         *rank = 3;
-    } 
-    else 
+    }
+    else
     {
         *rank = 0;
     }
@@ -131,7 +132,7 @@ BMI_API void get_var_rank(const char *name, int *rank)
 
 BMI_API void get_var_shape(const char *name, int shape[MAXDIMS])
 {
-  
+
     int rank = 0;
     int i;
     for (i = 0; i < MAXDIMS; i++) {
@@ -143,22 +144,22 @@ BMI_API void get_var_shape(const char *name, int shape[MAXDIMS])
     if (strcmp(name, "arr1") == 0)
     {
         shape[0] = 3;
-    } 
+    }
     else if (strcmp(name, "arr2") == 0)
     {
         shape[0] = 2;
         shape[1] = 3;
 
-    } 
+    }
     else if (strcmp(name, "arr3") == 0)
     {
         shape[0] = 2;
         shape[1] = 2;
         shape[2] = 3;
-    } 
-    else 
+    }
+    else
     {
-      
+
     }
     sprintf(msg, "variable %s has shape %d", name, *shape);
     _log(DEBUG, msg);
@@ -170,16 +171,16 @@ BMI_API void get_var_type(const char *name, char *type)
     if (strcmp(name, "arr1") == 0)
     {
         strncpy(type, "double", MAXSTRINGLEN);
-    } 
+    }
     else if (strcmp(name, "arr2") == 0)
     {
         strncpy(type, "int", MAXSTRINGLEN);
-    } 
+    }
     else if (strcmp(name, "arr3") == 0)
     {
         strncpy(type, "bool", MAXSTRINGLEN);
-    } 
-    else 
+    }
+    else
     {
         strncpy(type, "", MAXSTRINGLEN);
     }
@@ -193,16 +194,16 @@ BMI_API void get_var(const char *name, void **ptr)
     if (strcmp(name, "arr1") == 0)
     {
         *ptr = &arr1;
-    } 
+    }
     else if (strcmp(name, "arr2") == 0)
     {
         *ptr = &arr2;
-    } 
+    }
     else if (strcmp(name, "arr3") == 0)
     {
         *ptr = &arr3;
-    } 
-    else 
+    }
+    else
     {
         *ptr = NULL;
     }
