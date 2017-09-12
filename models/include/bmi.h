@@ -23,12 +23,13 @@
 #include <stddef.h>
 
 typedef enum {
-    ALL,
-    DEBUG,
-    INFO,
-    WARN,
-    ERROR,
-    FATAL
+    LEVEL_ALL,
+    LEVEL_DEBUG,
+    LEVEL_INFO,
+    LEVEL_WARNING,
+    LEVEL_ERROR,
+    LEVEL_FATAL,
+    LEVEL_NONE
 } Level;
 
 #ifdef __cplusplus
