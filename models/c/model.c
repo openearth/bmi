@@ -247,19 +247,18 @@ BMI_API void set_var_slice(const char *name, const int *start, const int *count,
     }
 }
 
-BMI_API void set_var_at_indices(const char *name, const int *start, const int *count, const void *ptr)
+BMI_API int set_value_at_indices(const char *name, int *inds, int len, void *ptr)
 {
-    int i;
-    int j;
-    if (strcmp(name, "arr2") == 0) {
-        for(i = 0; i < count[0]; ++i)
+    if (strcmp(name, "arr1") == 0) {
+        for(int i = 0; i < len; ++i)
         {
-            for (j = 0; j < count[1]; ++j)
-            {
-                arr2[start[0] + i][start[1] + j] = ((int*) ptr)[i * 3 + j];
-            }
+            /* unravel index here... */
+            int idx = inds[i];
+            arr1[idx] = ((int*) ptr)[i];
         }
+        return 0;
     }
+    return 1;
 }
 
 

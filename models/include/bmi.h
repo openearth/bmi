@@ -78,7 +78,8 @@ extern "C" {
 
     /* compatible with csdms BMI api */
     BMI_API int set_value(const char *name, const void *ptr);
-    BMI_API int set_value_at_indices(const char *name, int *inds, void *ptr);
+    /* There is an inconsistency in the csdms api here. The len is missing in the spec. */
+    BMI_API int set_value_at_indices(const char *name, int *inds, int len, void *ptr);
     /* Set the variable from contiguous memory referenced to by ptr */
     BMI_API void set_var(const char *name, const void *ptr) {
         set_value(name, ptr);
