@@ -6,7 +6,7 @@
 #define BMI_API_H
 
 #define BMI_API_VERSION_MAJOR 1
-#define BMI_API_VERSION_MINOR 0
+#define BMI_API_VERSION_MINOR 1
 
 #if defined _WIN32
 #define BMI_API __declspec(dllexport)
@@ -63,11 +63,27 @@ extern "C" {
 
     BMI_API void get_var_name(int index, char *name);
 
-    /* get a pointer pointer - a reference to a multidimensional array */
-    BMI_API void get_var(const char *name, void **ptr);
 
+    /* compatible with csdms BMI api */
+    BMI_API int get_value(const char *name, const void *ptr);
+    BMI_API int get_value_ptr(const char *name, void **ptr);
+    /* please note these are not ordered the same as set_value_at_indices */
+    BMI_API int get_value_at_indices(const char *name, void **ptr, int *inds);
+
+    /* get a pointer pointer - a reference to a multidimensional array */
+    BMI_API void get_var(const char *name, void **ptr) {
+        get_value_ptr(name, ptr);
+        return;
+    }
+
+    /* compatible with csdms BMI api */
+    BMI_API int set_value(const char *name, const void *ptr);
+    BMI_API int set_value_at_indices(const char *name, int *inds, void *ptr);
     /* Set the variable from contiguous memory referenced to by ptr */
-    BMI_API void set_var(const char *name, const void *ptr);
+    BMI_API void set_var(const char *name, const void *ptr) {
+        set_value(name, ptr);
+        return;
+    };
 
     /* Set a slice of the variable from contiguous memory using start / count multi-dimensional indices */
     BMI_API void set_var_slice(const char *name, const int *start, const int *count, const void *ptr);
@@ -83,4 +99,3 @@ extern "C" {
 #endif
 
 #endif
-
