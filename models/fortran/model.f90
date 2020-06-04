@@ -204,6 +204,55 @@ contains
     end select
 
   end subroutine set_var
+
+  subroutine set_var_slice(c_var_name, c_start, count, xptr) bind(C, name="set_var_slice")
+    
+    !DEC$ ATTRIBUTES DLLEXPORT :: set_var_slice
+    ! Return a pointer to the variable
+    use iso_c_binding, only: c_double, c_char, c_loc, c_f_pointer
+
+    integer(c_int) :: c_start(MAXDIMS)
+    integer(c_int) :: start(MAXDIMS)
+    integer(c_int) :: count(MAXDIMS)
+    character(kind=c_char), intent(in) :: c_var_name(*)
+    type(c_ptr), value, intent(in) :: xptr
+
+
+    real(c_double), pointer :: x_1d_double_ptr(:)
+    real(c_double), pointer :: x_2d_double_ptr(:,:)
+    real(c_double), pointer :: x_3d_double_ptr(:,:,:)
+    integer(c_int), pointer :: x_1d_int_ptr(:)
+    integer(c_int), pointer :: x_2d_int_ptr(:,:)
+    integer(c_int), pointer :: x_3d_int_ptr(:,:,:)
+    real(c_float), pointer  :: x_1d_float_ptr(:)
+    real(c_float), pointer  :: x_2d_float_ptr(:,:)
+    real(c_float), pointer  :: x_3d_float_ptr(:,:,:)
+    logical(c_bool), pointer  :: x_1d_bool_ptr(:)
+    logical(c_bool), pointer  :: x_2d_bool_ptr(:,:)
+    logical(c_bool), pointer  :: x_3d_bool_ptr(:,:,:)
+
+    ! The fortran name of the attribute name
+    character(len=strlen(c_var_name)) :: var_name
+    ! Store the name
+    var_name = char_array_to_string(c_var_name)
+
+    start = c_start + 1
+
+    select case(var_name)
+    case("arr1")
+       call c_f_pointer(xptr, x_1d_double_ptr, (/count(1)/))
+       arr1(start(1):(start(1)+count(1)-1)) = (/ x_1d_double_ptr /)
+    case("arr2")
+       call c_f_pointer(xptr, x_2d_int_ptr, (/count(1), count(2)/))
+       arr2(start(1):(start(1)+count(1)), start(2):(start(2)+count(2))) = x_2d_int_ptr
+    case("arr3")
+       call c_f_pointer(xptr, x_3d_int_ptr, (/count(1), count(2), count(3)/))
+       arr3(start(1):(start(1)+count(1)), start(2):(start(2)+count(2)), start(3):(start(3)+count(3))) = x_3d_bool_ptr
+    end select
+
+  end subroutine set_var_slice
+
+  
   subroutine get_current_time(time) bind(C, name="get_current_time")
     !DEC$ ATTRIBUTES DLLEXPORT :: get_current_time
 
@@ -220,6 +269,14 @@ contains
 
   end subroutine get_start_time
 
+  subroutine get_time_step(time_step) bind(C, name="get_time_step")
+    !DEC$ ATTRIBUTES DLLEXPORT :: get_time_step
+
+    real(c_double) :: time_step
+    time_step = 1.0
+
+  end subroutine get_time_step
+  
   subroutine get_end_time(time) bind(C, name="get_end_time")
     !DEC$ ATTRIBUTES DLLEXPORT :: get_end_time
 
